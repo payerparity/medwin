@@ -1,0 +1,25 @@
+---
+// Procedure brochures grouped by spine region, with EN / ES download links.
+import { brochures, brochureHref, brochureRegions } from '@/content/brochures';
+const labels: Record<string, string> = { Cervical: 'Neck (cervical)', Thoracic: 'Mid-back (thoracic)', Lumbar: 'Low back (lumbar)', Other: 'Pelvis & other' };
+---
+<div class="brochures">
+  {brochureRegions.map((region) => (
+    <section class="brochure-group">
+      <h3>{labels[region]}</h3>
+      <ul class="brochure-list">
+        {brochures.filter((b) => b.region === region).map((b) => (
+          <li>
+            <span class="brochure-title">{b.title}</span>
+            <span class="brochure-links">
+              <a href={brochureHref(b, 'en')} target="_blank" rel="noopener">English<span class="visually-hidden">: {b.title} (PDF)</span></a>
+              {b.es
+                ? <a href={brochureHref(b, 'es')} target="_blank" rel="noopener" lang="es">Español<span class="visually-hidden">: {b.titleEs} (PDF)</span></a>
+                : <span class="brochure-na" aria-hidden="true">—</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>

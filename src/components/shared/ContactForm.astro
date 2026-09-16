@@ -1,0 +1,70 @@
+---
+// Structural markup only; each vibe styles .form / .field in its own CSS.
+import { practice } from '@/content/practice';
+interface Props { buttonLabel?: string; }
+const { buttonLabel = 'Send message' } = Astro.props;
+---
+<form class="form" action={practice.contactFormEndpoint} method="POST" data-contact-form>
+  <div class="form-row">
+    <label class="field">
+      <span>First name</span>
+      <input type="text" name="first_name" autocomplete="given-name" required />
+    </label>
+    <label class="field">
+      <span>Last name</span>
+      <input type="text" name="last_name" autocomplete="family-name" required />
+    </label>
+  </div>
+  <div class="form-row">
+    <label class="field">
+      <span>Email</span>
+      <input type="email" name="email" autocomplete="email" required />
+    </label>
+    <label class="field">
+      <span>Phone</span>
+      <input type="tel" name="phone" autocomplete="tel" />
+    </label>
+  </div>
+  <label class="field">
+    <span>Preferred location</span>
+    <select name="location">
+      <option value="">No preference</option>
+      <option value="brownsville">Brownsville</option>
+      <option value="sugar-land">Sugar Land</option>
+    </select>
+  </label>
+  <label class="field">
+    <span>How can we help?</span>
+    <textarea name="message" rows="5" required></textarea>
+  </label>
+  <p class="form-note">
+    For your privacy, please do not include medical details in this form. We will call you to discuss your care.
+    If this is an emergency, call 911.
+  </p>
+  <button type="submit" class="btn btn-primary">{buttonLabel}</button>
+  <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+</form>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = document.querySelector<HTMLElement>('[data-form-status]');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!status) return;
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      if (res.ok) {
+        status.textContent = 'Thank you — we will be in touch shortly.';
+        form.reset();
+      } else {
+        status.textContent = 'Something went wrong. Please call us instead.';
+      }
+    } catch {
+      status.textContent = 'Something went wrong. Please call us instead.';
+    }
+  });
+</script>

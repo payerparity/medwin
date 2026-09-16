@@ -1,0 +1,117 @@
+---
+import Layout from '@/layouts/WarmLayout.astro';
+import Locations from '@/components/warm/Locations.astro';
+import { practice, telHref } from '@/content/practice';
+import { services, commonConditions } from '@/content/services';
+import { doctor } from '@/content/doctor';
+import { home } from '@/content/site';
+const base = '/warm/';
+---
+<Layout title={practice.name}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">{home.eyebrow}</span>
+        <h1>You don't have to live with <em>back or neck pain.</em></h1>
+        <p class="lead">{home.subhead}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={base + 'contact/'}>{home.primaryCta}</a>
+          <a class="btn-link" href={telHref(practice.primaryPhone)}>or call {practice.primaryPhone}</a>
+        </div>
+        <p class="hero-note">
+          <span class="dots" aria-hidden="true"><span style="background:var(--terra)"></span><span style="background:var(--sage)"></span><span style="background:var(--ink)"></span></span>
+          Se habla español · Two offices in Texas
+        </p>
+      </div>
+      <div class="blob">
+        <div class="blob-shape" aria-hidden="true"></div>
+        <div class="blob-photo" aria-hidden="true"><span class="blob-inner"></span><span class="blob-word">Hola.<br/>Hello.</span></div>
+        <span class="blob-tag bt-1"><i></i> Board-certified</span>
+        <span class="blob-tag bt-2"><i></i> Same-day procedures</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <ul class="trust">
+      {home.trustPoints.map((t) => <li><strong>{t.label}</strong><span>{t.detail}</span></li>)}
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">How we help</span>
+        <h2>Three ways we <em>get you moving</em> again</h2>
+      </div>
+      <div class="chapters">
+        {services.map((s, i) => (
+          <article class="chapter">
+            <div class={`chapter-visual v-${i + 1}`} aria-hidden="true">
+              <span class="ring"></span><span class="ring ring-2"></span>
+              <span class="big-num">{i + 1}</span>
+            </div>
+            <div>
+              <span class="chapter-num">Chapter {i + 1}</span>
+              <h2>{s.title}</h2>
+              <p>{s.blurb}</p>
+              <ul>{s.highlights.slice(0, 4).map((h) => <li>{h}</li>)}</ul>
+              <a class="btn btn-secondary" href={base + s.slug + '/'}>About {s.shortTitle.toLowerCase()}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <figure class="pull">
+      <p>{home.mission}</p>
+      <figcaption><cite>— Our mission</cite></figcaption>
+    </figure>
+  </section>
+
+  <section class="section">
+    <div class="container doctor">
+      <div class="doctor-photo"><img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" /></div>
+      <div>
+        <span class="eyebrow">Meet the doctor</span>
+        <blockquote>{doctor.quote}”</blockquote>
+        <p class="who">{doctor.name}<small>{doctor.title}</small></p>
+        <ul class="creds">{doctor.credentials.map((c) => <li>{c.short}</li>)}</ul>
+        <a class="btn-link" href={base + 'doctor/'}>Read Dr. Raguthu's story →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Conditions</span>
+        <h2>What brings people <em>through our door</em></h2>
+      </div>
+      <ul class="cond-cloud">{commonConditions.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Locations</span>
+        <h2>Come see us</h2>
+      </div>
+      <Locations />
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom: var(--s-8)">
+    <div class="cta">
+      <h2>{home.closing}</h2>
+      <p>Tell us a little about what's going on and we'll call you back.</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href={base + 'contact/'}>{home.primaryCta}</a>
+        <a class="btn btn-secondary" href={telHref(practice.primaryPhone)}>Call {practice.primaryPhone}</a>
+      </div>
+    </div>
+  </section>
+</Layout>

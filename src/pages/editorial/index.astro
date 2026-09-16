@@ -1,0 +1,85 @@
+---
+import Layout from '@/layouts/EditorialLayout.astro';
+import Locations from '@/components/editorial/Locations.astro';
+import { practice, telHref } from '@/content/practice';
+import { services, commonConditions } from '@/content/services';
+import { doctor } from '@/content/doctor';
+import { home } from '@/content/site';
+const base = '/editorial/';
+---
+<Layout title={practice.name}>
+  <section class="hero container">
+    <span class="eyebrow">{home.eyebrow}</span>
+    <h1>You don't have to live with <em>back or neck pain.</em></h1>
+    <div class="hero-meta">
+      <p class="lead">{home.subhead}</p>
+      <dl>
+        {home.trustPoints.map((t) => <div><dt>{t.label}</dt><dd>{t.detail}</dd></div>)}
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href={base + 'contact/'}>{home.primaryCta}</a>
+        <a class="btn" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2>Services</h2>
+      <p>Diagnosis, treatment and recovery under one roof, so your pain specialist and your physical therapist are working from the same plan.</p>
+    </div>
+    <div class="index">
+      {services.map((s, i) => (
+        <a class="index-row" href={base + s.slug + '/'}>
+          <span class="num">0{i + 1}</span>
+          <div><h3>{s.title}</h3><p>{s.blurb}</p></div>
+          <ul>{s.highlights.slice(0, 4).map((h) => <li>{h}</li>)}</ul>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="profile">
+      <figure class="profile-photo">
+        <img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" />
+        <figcaption>{doctor.name} — {doctor.credentials.map((c) => c.short).join(' · ')}</figcaption>
+      </figure>
+      <div>
+        <span class="eyebrow">The physician</span>
+        <h2>{doctor.name}</h2>
+        <p class="role">{doctor.title}</p>
+        <p class="dropcap">{doctor.bio[0]}</p>
+        <blockquote class="pull">“{doctor.quote}”</blockquote>
+        <a class="link" href={base + 'doctor/'}>Read the full profile</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="section-head">
+      <h2>Conditions</h2>
+      <p>A partial index of what we see most often. If your condition is not listed, call — it is very likely something we treat.</p>
+    </div>
+    <ul class="cond-cols">{commonConditions.map((c) => <li>{c}</li>)}</ul>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="section-head">
+      <h2>Locations</h2>
+      <p>Two offices, one phone number. Most procedures are performed on site and you return home the same day.</p>
+    </div>
+    <Locations />
+  </section>
+
+  <section class="closing container">
+    <div class="ornament" aria-hidden="true">❧</div>
+    <h2>{home.closing}</h2>
+    <p>Request an appointment and we will call you back, usually the same business day.</p>
+    <div class="closing-actions">
+      <a class="btn btn-solid" href={base + 'contact/'}>{home.primaryCta}</a>
+      <a class="btn btn-gold" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+    </div>
+  </section>
+</Layout>

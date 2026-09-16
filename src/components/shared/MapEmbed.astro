@@ -1,0 +1,13 @@
+---
+import { mapsEmbedSrc, type Location } from '@/content/practice';
+interface Props { location: Location; }
+const { location } = Astro.props;
+---
+<iframe
+  class="map"
+  src={mapsEmbedSrc(location)}
+  title={`Map to ${location.name} office`}
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  allowfullscreen
+></iframe>

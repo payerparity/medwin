@@ -1,0 +1,104 @@
+---
+// The picker: lets the client browse the four design directions. Delete this page once a vibe is chosen.
+import { vibes } from '@/content/site';
+import { practice } from '@/content/practice';
+const swatches: Record<string, string[]> = {
+  clinical: ['#0b5fa5', '#1ba39c', '#f4f7fb', '#0f172a'],
+  warm: ['#c8663d', '#8fa58c', '#fbf7f1', '#3b2f2a'],
+  bold: ['#c8ff3d', '#111418', '#ffffff', '#9aa3ad'],
+  editorial: ['#14213d', '#b8975a', '#f6f4ef', '#1c1f2a'],
+};
+const fonts: Record<string, string> = {
+  clinical: 'Inter',
+  warm: 'Fraunces + Source Sans',
+  bold: 'Bebas Neue + DM Sans',
+  editorial: 'Cormorant Garamond + Inter',
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Choose a direction · {practice.name}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #0f1115; color: #e6e8ec; -webkit-font-smoothing: antialiased; }
+      .wrap { max-width: 78rem; margin-inline: auto; padding: 3rem 1.25rem 5rem; }
+      header { max-width: 44rem; margin-bottom: 3rem; }
+      .eyebrow { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: #8b93a1; margin: 0 0 0.75rem; }
+      h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 1rem; }
+      header p { color: #a7aeba; font-size: 1.1rem; line-height: 1.6; margin: 0; }
+      .grid { display: grid; gap: 1.5rem; }
+      @media (min-width: 48em) { .grid { grid-template-columns: 1fr 1fr; } }
+      .card { background: #171a20; border: 1px solid #262b34; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s, transform .15s; }
+      .card:hover { border-color: #3b4350; transform: translateY(-2px); }
+      .shot { aspect-ratio: 16 / 10; background: #0b0d11; overflow: hidden; border-bottom: 1px solid #262b34; position: relative; }
+      .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+      .shot .k { position: absolute; top: 0.75rem; left: 0.75rem; background: rgba(0,0,0,.7); color: #fff; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; padding: 0.3rem 0.6rem; border-radius: 999px; }
+      .body { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; }
+      .body h2 { margin: 0; font-size: 1.5rem; letter-spacing: -0.01em; }
+      .mood { color: #8b93a1; font-size: 0.9rem; margin: 0; }
+      .desc { color: #c5cad3; line-height: 1.6; margin: 0; }
+      .meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.75rem; font-size: 0.8rem; color: #8b93a1; }
+      .swatches { display: flex; gap: 0.25rem; }
+      .swatches i { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); display: block; }
+      .actions { display: flex; gap: 0.75rem; padding: 0 1.5rem 1.5rem; }
+      .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; text-decoration: none; border: 1px solid #3b4350; color: #e6e8ec; }
+      .btn-primary { background: #fff; color: #0f1115; border-color: #fff; }
+      .btn:hover { border-color: #fff; }
+      .how { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid #262b34; color: #a7aeba; max-width: 52rem; line-height: 1.7; }
+      .how h3 { color: #e6e8ec; margin: 0 0 0.5rem; font-size: 1rem; }
+      .how ol { padding-left: 1.2rem; margin: 0.5rem 0 0; }
+      code { background: #1f242c; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <p class="eyebrow">{practice.name} — website redesign</p>
+        <h1>Four directions. Same content. Pick the one that feels like your practice.</h1>
+        <p>Every version has the same seven pages, the same copy, phone numbers, locations and brochures. Only the look and feel changes. Open any one and use the switcher in the bottom corner to hop between designs on the same page.</p>
+      </header>
+
+      <div class="grid">
+        {vibes.map((v, i) => (
+          <article class="card">
+            <a class="shot" href={`/${v.id}/`} aria-label={`Open the ${v.name} design`}>
+              <span class="k">0{i + 1}</span>
+              <img src={`/previews/${v.id}.png`} alt={`${v.name} home page preview`} loading={i < 2 ? 'eager' : 'lazy'} />
+            </a>
+            <div class="body">
+              <h2>{v.name}</h2>
+              <p class="mood">{v.mood}</p>
+              <p class="desc">{v.description}</p>
+              <div class="meta">
+                <span class="swatches" aria-hidden="true">{swatches[v.id].map((c) => <i style={`background:${c}`}></i>)}</span>
+                <span>{fonts[v.id]}</span>
+              </div>
+            </div>
+            <div class="actions">
+              <a class="btn btn-primary" href={`/${v.id}/`}>Open {v.name} →</a>
+              <a class="btn" href={`/${v.id}/contact/`}>Contact page</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <section class="how">
+        <h3>What to look at</h3>
+        Try each one on your phone as well as a desktop. Check the home page, one service page, and the contact page. Ask: would a new patient trust this? Would a referring physician? Does it look like <em>you</em>?
+        <h3 style="margin-top:1.5rem">What happens next</h3>
+        <ol>
+          <li>You pick a direction (or say "this one, but with the colors from that one").</li>
+          <li>We replace placeholders: real photos of the office and Dr. Raguthu, office hours, insurance accepted, and confirm the Sugar Land location.</li>
+          <li>The other three directions are deleted and the winner goes live at <code>acepain.com</code>.</li>
+        </ol>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+---
+import { nav } from '@/content/site';
+import { practice, telHref } from '@/content/practice';
+const base = '/editorial/';
+const path = Astro.url.pathname;
+const isCurrent = (p: string) => path === base + p;
+---
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-top caps">
+      <span>Brownsville · Sugar Land, Texas</span>
+      <a href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+    </div>
+    <div class="masthead-brand">
+      <a class="brand" href={base}>Ace Pain Management<small>Physiatry · Interventional Pain · Rehabilitation</small></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>Menu</button>
+    </div>
+  </div>
+  <nav class="nav-links" aria-label="Primary">
+    {nav.filter(n => n.path !== '').map((n) => <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
+  </nav>
+  <nav class="nav-mobile" id="mobile-nav" hidden aria-label="Primary mobile">
+    {nav.map((n) => <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
+    <a class="btn btn-solid" href={telHref(practice.primaryPhone)}>Call {practice.primaryPhone}</a>
+  </nav>
+</header>
+<script>
+  const t = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const m = document.getElementById('mobile-nav');
+  t?.addEventListener('click', () => {
+    const open = t.getAttribute('aria-expanded') === 'true';
+    t.setAttribute('aria-expanded', String(!open));
+    t.textContent = open ? 'Menu' : 'Close';
+    if (m) m.hidden = open;
+  });
+</script>

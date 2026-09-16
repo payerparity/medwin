@@ -1,0 +1,27 @@
+---
+import Layout from '@/layouts/EditorialLayout.astro';
+import { doctor } from '@/content/doctor';
+import { practice, telHref } from '@/content/practice';
+const base = '/editorial/';
+---
+<Layout title={doctor.name} description={doctor.summary}>
+  <section class="page-head container">
+    <span class="eyebrow">The physician</span>
+    <h1>{doctor.name}</h1>
+    <p class="lead">{doctor.title}</p>
+  </section>
+  <section class="section container profile" style="padding-top: var(--s-6)">
+    <figure class="profile-photo">
+      <img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" />
+      <figcaption>{doctor.name} — {doctor.credentials.map((c) => c.short).join(' · ')}</figcaption>
+    </figure>
+    <div>
+      <blockquote class="pull" style="margin-top:0">“{doctor.quote}”</blockquote>
+      {doctor.bio.map((p, i) => <p class={i === 0 ? 'dropcap' : ''} style="margin-bottom: var(--s-4)">{p}</p>)}
+      <ul class="creds">{doctor.credentials.map((c) => <li><strong>{c.short}</strong><span>{c.long}</span></li>)}</ul>
+      <h3 style="margin-bottom: var(--s-3)">Training & affiliations</h3>
+      <ul class="aside-card" style="border:0;padding:0;display:grid;gap:.4rem;font-size:.9rem">{doctor.affiliations.map((a) => <li>{a}</li>)}</ul>
+      <div style="margin-top: var(--s-6)"><a class="btn btn-solid" href={base + 'contact/'}>Request a consultation</a></div>
+    </div>
+  </section>
+</Layout>

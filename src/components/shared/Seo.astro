@@ -1,0 +1,14 @@
+---
+import { practice } from '@/content/practice';
+interface Props { title: string; description?: string; }
+const { title, description = practice.description } = Astro.props;
+const fullTitle = title === practice.name ? title : `${title} · ${practice.name}`;
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />

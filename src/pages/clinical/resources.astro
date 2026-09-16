@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/ClinicalLayout.astro';
+import Icon from '@/components/clinical/Icons.astro';
+import BrochureList from '@/components/shared/BrochureList.astro';
+import { practice } from '@/content/practice';
+---
+<Layout title="Patient Resources" description="Patient portal access and procedure brochures in English and Spanish.">
+  <section class="page-head">
+    <div class="container">
+      <span class="eyebrow">Patients</span>
+      <h1>Patient resources</h1>
+      <p class="lead">Access your records, and read about your procedure before your visit — in English or Spanish.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="resource-cards">
+        <article class="card">
+          <span class="ic"><Icon name="portal" /></span>
+          <h3>Patient portal</h3>
+          <p>View visit summaries, request refills and message the office through our secure eClinicalWorks portal.</p>
+          <a class="btn btn-primary" href={practice.portalUrl} target="_blank" rel="noopener">Open the patient portal ↗</a>
+        </article>
+        <article class="card">
+          <span class="ic"><Icon name="doc" /></span>
+          <h3>Procedure brochures</h3>
+          <p>Illustrated guides for each injection and procedure we perform: what it treats, how it's done, and what to expect afterward. Many are available in Spanish.</p>
+          <a class="btn btn-secondary" href="#brochures">Browse brochures ↓</a>
+        </article>
+      </div>
+      <div class="section-head" id="brochures"><span class="eyebrow">Brochures</span><h2>Procedure guides</h2><p>PDF · opens in a new tab. <span lang="es">Folletos disponibles en español.</span></p></div>
+      <BrochureList />
+    </div>
+  </section>
+</Layout>

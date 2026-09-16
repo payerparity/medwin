@@ -1,0 +1,19 @@
+---
+import MapEmbed from '@/components/shared/MapEmbed.astro';
+import { locations, telHref, formatAddress, mapsHref } from '@/content/practice';
+interface Props { maps?: boolean }
+const { maps = false } = Astro.props;
+---
+<div class="locations">
+  {locations.map((l) => (
+    <article class="location">
+      <h3>{l.name}</h3>
+      <address>{formatAddress(l)}<br /><a href={telHref(l.phone)}>{l.phone}</a> · Fax {l.fax}</address>
+      {maps && <MapEmbed location={l} />}
+      <div class="location-actions">
+        <a class="btn btn-solid" href={telHref(l.phone)}>Call</a>
+        <a class="btn" href={mapsHref(l)} target="_blank" rel="noopener">Directions</a>
+      </div>
+    </article>
+  ))}
+</div>

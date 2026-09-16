@@ -1,0 +1,48 @@
+/* Shared reset + structural tokens. Vibe-specific tokens live in styles/<vibe>.css */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img, svg, video, iframe { display: block; max-width: 100%; }
+img { height: auto; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul, ol { list-style: none; padding: 0; }
+.prose ul, .prose ol { list-style: disc; padding-left: 1.25rem; }
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
+input, textarea, select { font: inherit; }
+:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+
+:root {
+  --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem;
+  --s-6: 2rem; --s-7: 3rem; --s-8: 4rem; --s-9: 6rem; --s-10: 8rem;
+  --container: 72rem;
+  --gutter: 1rem;
+}
+@media (min-width: 40em) { :root { --gutter: 2rem; } }
+
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip-link { position: absolute; left: var(--s-4); top: -100px; padding: var(--s-2) var(--s-4); background: #000; color: #fff; z-index: 1000; }
+.skip-link:focus { top: var(--s-4); }
+
+/* Vibe switcher — intentionally vibe-agnostic so it looks the same everywhere */
+.vibe-switcher {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 999;
+  display: flex; align-items: center; gap: 0.25rem;
+  padding: 0.35rem; border-radius: 999px;
+  background: rgba(20, 20, 24, 0.92); color: #fff;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  font: 500 0.8rem/1 system-ui, -apple-system, sans-serif;
+  backdrop-filter: blur(8px);
+}
+.vibe-switcher a {
+  padding: 0.5rem 0.75rem; border-radius: 999px; text-decoration: none; color: #cfd2d8; white-space: nowrap;
+}
+.vibe-switcher a:hover { background: rgba(255,255,255,.1); color: #fff; }
+.vibe-switcher a[aria-current="true"] { background: #fff; color: #111; }
+.vibe-switcher .vs-home { color: #9aa0ab; padding-inline: 0.6rem; border-right: 1px solid rgba(255,255,255,.15); border-radius: 0; margin-right: 0.15rem; }
+.vibe-switcher[hidden] { display: none; }
+@media (max-width: 40em) {
+  .vibe-switcher { left: 0.5rem; right: 0.5rem; overflow-x: auto; scrollbar-width: none; }
+  .vibe-switcher a { padding: 0.5rem 0.55rem; font-size: 0.7rem; }
+}

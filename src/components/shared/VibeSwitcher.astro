@@ -1,0 +1,19 @@
+---
+// Floating pill that jumps to the same page in another vibe. Hidden with ?clean=1 (used for screenshots).
+import { vibes } from '@/content/site';
+interface Props { current: string; }
+const { current } = Astro.props;
+// e.g. /clinical/contact/ -> contact/
+const rest = Astro.url.pathname.replace(/^\/[^/]+\/?/, '');
+---
+<nav class="vibe-switcher" aria-label="Switch design direction" data-vibe-switcher>
+  <a class="vs-home" href="/" title="Back to all directions">◀ All</a>
+  {vibes.map((v) => (
+    <a href={`/${v.id}/${rest}`} aria-current={v.id === current ? 'true' : undefined}>{v.name}</a>
+  ))}
+</nav>
+<script>
+  if (new URLSearchParams(location.search).has('clean')) {
+    document.querySelector('[data-vibe-switcher]')?.setAttribute('hidden', '');
+  }
+</script>

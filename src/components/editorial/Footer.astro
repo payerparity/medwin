@@ -1,0 +1,20 @@
+---
+import { nav } from '@/content/site';
+import { practice, locations, telHref, formatAddress } from '@/content/practice';
+const base = '/editorial/';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <a class="brand" href={base}>Ace Pain Management<small>Physiatry · Interventional Pain · Rehabilitation</small></a>
+    <nav class="footer-links" aria-label="Footer">{nav.map((n) => <a href={base + n.path}>{n.label}</a>)}</nav>
+    <div class="footer-locs">
+      {locations.map((l) => <div><strong>{l.name}</strong>{formatAddress(l)}<br /><a href={telHref(l.phone)}>{l.phone}</a> · Fax {l.fax}</div>)}
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {practice.name}</span>
+      <a href={practice.portalUrl} target="_blank" rel="noopener">Patient portal ↗</a>
+      <a href={`mailto:${practice.primaryEmail}`}>{practice.primaryEmail}</a>
+    </div>
+  </div>
+</footer>
