@@ -1,9 +1,9 @@
 ---
-// Floating pill that jumps to the same page in another vibe. Hidden with ?clean=1 (used for screenshots).
-import { vibes } from '@/content/site';
+// Floating pill that jumps to the same page (and language) in another vibe. Hidden with ?clean=1 (used for screenshots).
+import { vibes } from '@/data/site';
 interface Props { current: string; }
 const { current } = Astro.props;
-// e.g. /clinical/contact/ -> contact/
+// e.g. /clinical/es/contact/ -> es/contact/
 const rest = Astro.url.pathname.replace(/^\/[^/]+\/?/, '');
 ---
 <nav class="vibe-switcher" aria-label="Switch design direction" data-vibe-switcher>

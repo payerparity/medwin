@@ -1,34 +1,19 @@
 ---
-import { nav } from '@/content/site';
-import { practice, locations, telHref, formatAddress } from '@/content/practice';
-const base = '/warm/';
+import { practice, locations, telHref, formatAddress } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { nav, ui } = getContent(lang);
+const href = (p: string) => localePath('warm', lang, p);
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div>
-        <a class="brand" href={base}>Ace <span>Pain</span> Management</a>
-        <p>{practice.description}</p>
-      </div>
-      <div>
-        <h4>Visit</h4>
-        <ul>{nav.map((n) => <li><a href={base + n.path}>{n.label}</a></li>)}</ul>
-      </div>
-      {locations.map((l) => (
-        <div>
-          <h4>{l.name}</h4>
-          <ul>
-            <li>{formatAddress(l)}</li>
-            <li><a href={telHref(l.phone)}>{l.phone}</a></li>
-            <li>Fax {l.fax}</li>
-          </ul>
-        </div>
-      ))}
+      <div><a class="brand" href={href('')}>Ace <span>Pain</span> Management</a><p>{ui.seoDescription}</p></div>
+      <div><h4>{ui.visitNav}</h4><ul>{nav.map((n) => <li><a href={href(n.path)}>{n.label}</a></li>)}</ul></div>
+      {locations.map((l) => <div><h4>{l.name}</h4><ul><li>{formatAddress(l)}</li><li><a href={telHref(l.phone)}>{l.phone}</a></li><li>{ui.fax} {l.fax}</li></ul></div>)}
     </div>
-    <div class="footer-bottom">
-      <span>© {year} {practice.name}</span>
-      <a href={practice.portalUrl} target="_blank" rel="noopener">Patient portal ↗</a>
-    </div>
+    <div class="footer-bottom"><span>© {year} {practice.name}</span><a href={practice.portalUrl} target="_blank" rel="noopener">{ui.portalLink}</a></div>
   </div>
 </footer>

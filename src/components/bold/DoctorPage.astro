@@ -1,0 +1,33 @@
+---
+import Layout from '@/layouts/BoldLayout.astro';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { doctor, ui } = getContent(lang);
+const href = (p: string) => localePath('bold', lang, p);
+---
+<Layout title={doctor.name} description={doctor.summary} lang={lang}>
+  <section class="page-head">
+    <div class="container doc">
+      <div class="doc-photo"><img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" /></div>
+      <div>
+        <span class="eyebrow">{ui.meetDoctor}</span>
+        <h1 style="font-size: clamp(2.6rem, 6vw, 5rem)">{doctor.name}</h1>
+        <p class="lead">{doctor.title}</p>
+        <ul class="creds">{doctor.credentials.map((c) => <li>{c.short}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+  <section class="section container two-col">
+    <div class="prose">
+      <blockquote class="doc" style="display:block;font-family:var(--display);font-size:2.2rem;line-height:1.05;text-transform:uppercase">“<span class="hl">{doctor.quote}</span>”</blockquote>
+      <div>{doctor.bio.map((p) => <p>{p}</p>)}</div>
+    </div>
+    <aside class="aside">
+      <div class="aside-card"><h3>{ui.boardCerts}</h3><ul>{doctor.credentials.map((c) => <li>{c.long}</li>)}</ul></div>
+      <div class="aside-card"><h3>{ui.training}</h3><ul>{doctor.affiliations.map((a) => <li>{a}</li>)}</ul></div>
+      <div class="aside-card call"><h3>{ui.scheduleConsultation}</h3><a class="phone" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a><a class="btn" href={href('contact/')}>{ui.requestAppointment}</a></div>
+    </aside>
+  </section>
+</Layout>

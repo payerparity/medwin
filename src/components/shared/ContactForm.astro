@@ -1,47 +1,33 @@
 ---
 // Structural markup only; each vibe styles .form / .field in its own CSS.
-import { practice } from '@/content/practice';
-interface Props { buttonLabel?: string; }
-const { buttonLabel = 'Send message' } = Astro.props;
+import { practice, locations } from '@/data/practice';
+import { ui } from '@/data/ui';
+import type { Lang } from '@/i18n';
+interface Props { lang: Lang; buttonLabel?: string; }
+const { lang, buttonLabel } = Astro.props;
+const t = ui[lang].form;
 ---
-<form class="form" action={practice.contactFormEndpoint} method="POST" data-contact-form>
+<form class="form" action={practice.contactFormEndpoint} method="POST" data-contact-form
+  data-sending={t.sending} data-success={t.success} data-error={t.error}>
+  <input type="hidden" name="language" value={lang} />
   <div class="form-row">
-    <label class="field">
-      <span>First name</span>
-      <input type="text" name="first_name" autocomplete="given-name" required />
-    </label>
-    <label class="field">
-      <span>Last name</span>
-      <input type="text" name="last_name" autocomplete="family-name" required />
-    </label>
+    <label class="field"><span>{t.firstName}</span><input type="text" name="first_name" autocomplete="given-name" required /></label>
+    <label class="field"><span>{t.lastName}</span><input type="text" name="last_name" autocomplete="family-name" required /></label>
   </div>
   <div class="form-row">
-    <label class="field">
-      <span>Email</span>
-      <input type="email" name="email" autocomplete="email" required />
-    </label>
-    <label class="field">
-      <span>Phone</span>
-      <input type="tel" name="phone" autocomplete="tel" />
-    </label>
+    <label class="field"><span>{t.email}</span><input type="email" name="email" autocomplete="email" required /></label>
+    <label class="field"><span>{t.phone}</span><input type="tel" name="phone" autocomplete="tel" /></label>
   </div>
   <label class="field">
-    <span>Preferred location</span>
+    <span>{t.preferredLocation}</span>
     <select name="location">
-      <option value="">No preference</option>
-      <option value="brownsville">Brownsville</option>
-      <option value="sugar-land">Sugar Land</option>
+      <option value="">{t.noPreference}</option>
+      {locations.map((l) => <option value={l.id}>{l.name}</option>)}
     </select>
   </label>
-  <label class="field">
-    <span>How can we help?</span>
-    <textarea name="message" rows="5" required></textarea>
-  </label>
-  <p class="form-note">
-    For your privacy, please do not include medical details in this form. We will call you to discuss your care.
-    If this is an emergency, call 911.
-  </p>
-  <button type="submit" class="btn btn-primary">{buttonLabel}</button>
+  <label class="field"><span>{t.message}</span><textarea name="message" rows="5" required></textarea></label>
+  <p class="form-note">{t.note}</p>
+  <button type="submit" class="btn btn-primary">{buttonLabel ?? ui[lang].sendRequest}</button>
   <p class="form-status" role="status" aria-live="polite" data-form-status></p>
 </form>
 <script>
@@ -50,21 +36,11 @@ const { buttonLabel = 'Send message' } = Astro.props;
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!status) return;
-    status.textContent = 'Sending…';
+    status.textContent = form.dataset.sending ?? '';
     try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: new FormData(form),
-      });
-      if (res.ok) {
-        status.textContent = 'Thank you — we will be in touch shortly.';
-        form.reset();
-      } else {
-        status.textContent = 'Something went wrong. Please call us instead.';
-      }
-    } catch {
-      status.textContent = 'Something went wrong. Please call us instead.';
-    }
+      const res = await fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) });
+      if (res.ok) { status.textContent = form.dataset.success ?? ''; form.reset(); }
+      else status.textContent = form.dataset.error ?? '';
+    } catch { status.textContent = form.dataset.error ?? ''; }
   });
 </script>

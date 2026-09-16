@@ -1,6 +1,8 @@
 // Navigation, vibes, and home-page copy shared by every vibe.
 
-export const nav = [
+export interface NavItem { label: string; path: string }
+
+export const nav: NavItem[] = [
   { label: 'Home', path: '' },
   { label: 'Pain Management', path: 'pain-management/' },
   { label: 'Physical Therapy', path: 'physical-therapy/' },
@@ -8,7 +10,7 @@ export const nav = [
   { label: 'Meet the Doctor', path: 'doctor/' },
   { label: 'Patient Resources', path: 'resources/' },
   { label: 'Contact', path: 'contact/' },
-] as const;
+];
 
 export interface Vibe {
   id: 'clinical' | 'warm' | 'bold' | 'editorial';

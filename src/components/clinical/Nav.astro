@@ -1,32 +1,35 @@
 ---
-import { nav } from '@/content/site';
-import { practice, telHref } from '@/content/practice';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
 import Icon from './Icons.astro';
-const base = '/clinical/';
+import LangSwitch from '@/components/shared/LangSwitch.astro';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { nav, ui } = getContent(lang);
+const href = (p: string) => localePath('clinical', lang, p);
 const path = Astro.url.pathname;
-const isCurrent = (p: string) => path === base + p;
+const isCurrent = (p: string) => path === href(p);
 ---
 <header class="nav">
   <div class="container nav-inner">
-    <a class="brand" href={base}>
+    <a class="brand" href={href('')}>
       <span class="brand-mark"><Icon name="spine" size={20} /></span>
-      <span>{practice.name}<small>Pain · Therapy · Rehabilitation</small></span>
+      <span>{practice.name}<small>{ui.clinical.tagline}</small></span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      {nav.filter(n => n.path !== '').map((n) => (
-        <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>
-      ))}
+      {nav.filter(n => n.path !== '').map((n) => <a href={href(n.path)} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
     </nav>
-    <a class="btn btn-primary nav-cta" href={telHref(practice.primaryPhone)}><Icon name="phone" size={18} /> {practice.primaryPhone}</a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
-      <span class="visually-hidden">Menu</span><Icon name="menu" />
-    </button>
+    <div class="nav-right">
+      <LangSwitch lang={lang} />
+      <a class="btn btn-primary nav-cta" href={telHref(practice.primaryPhone)}><Icon name="phone" size={18} /> {practice.primaryPhone}</a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
+        <span class="visually-hidden">{ui.menu}</span><Icon name="menu" />
+      </button>
+    </div>
   </div>
   <nav class="nav-mobile" id="mobile-nav" hidden aria-label="Primary mobile">
-    {nav.map((n) => (
-      <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>
-    ))}
-    <a class="btn btn-primary" href={telHref(practice.primaryPhone)}><Icon name="phone" size={18} /> Call {practice.primaryPhone}</a>
+    {nav.map((n) => <a href={href(n.path)} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
+    <a class="btn btn-primary" href={telHref(practice.primaryPhone)}><Icon name="phone" size={18} /> {ui.call} {practice.primaryPhone}</a>
   </nav>
 </header>
 <script>

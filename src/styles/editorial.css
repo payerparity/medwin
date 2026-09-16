@@ -43,6 +43,8 @@ p { color: var(--muted); max-width: 62ch; }
 .masthead { border-bottom: 1px solid var(--line); }
 .masthead-top { display: flex; justify-content: space-between; align-items: center; padding-block: 0.6rem; border-bottom: 1px solid var(--line); }
 .masthead-top a { text-decoration: none; color: var(--muted); white-space: nowrap; }
+.masthead-right { display: flex; align-items: center; gap: var(--s-5); }
+.masthead-top .lang-switch { font-size: 0.72rem; letter-spacing: 0.18em; color: var(--navy); }
 @media (max-width: 40em) { .masthead-top span { display: none; } .masthead-top { justify-content: center; } }
 .masthead-top a:hover { color: var(--navy); }
 .masthead-brand { display: flex; align-items: center; justify-content: space-between; padding-block: var(--s-5); }

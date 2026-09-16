@@ -1,0 +1,34 @@
+---
+import Layout from '@/layouts/ClinicalLayout.astro';
+import ContactForm from '@/components/shared/ContactForm.astro';
+import Locations from './Locations.astro';
+import { practice, telHref } from '@/data/practice';
+import { getContent, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { ui } = getContent(lang);
+---
+<Layout title={ui.contact} lang={lang}>
+  <section class="page-head">
+    <div class="container">
+      <span class="eyebrow">{ui.contact}</span>
+      <h1>{ui.pages.contactTitle}</h1>
+      <p class="lead">{ui.pages.contactLeadBefore}<a href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>{ui.pages.contactLeadAfter}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="aside-card"><ContactForm lang={lang} /></div>
+      <div class="aside" style="position: static">
+        <div class="aside-card"><h3>{ui.officeHours}</h3><ul class="hours">{ui.hours.map((h) => <li><span>{h.days}</span><strong>{h.time}</strong></li>)}</ul></div>
+        <div class="aside-card"><h3>{ui.email}</h3><a href={`mailto:${practice.primaryEmail}`}>{practice.primaryEmail}</a></div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{ui.locations}</span><h2>{ui.findUs}</h2></div>
+      <Locations lang={lang} />
+    </div>
+  </section>
+</Layout>

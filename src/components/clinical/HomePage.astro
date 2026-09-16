@@ -1,0 +1,89 @@
+---
+import Layout from '@/layouts/ClinicalLayout.astro';
+import Icon from './Icons.astro';
+import Locations from './Locations.astro';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { services, commonConditions, doctor, home, ui } = getContent(lang);
+const href = (p: string) => localePath('clinical', lang, p);
+const icons = { 'pain-management': 'spine', 'physical-therapy': 'therapy', 'workers-comp': 'work' } as const;
+---
+<Layout title={practice.name} lang={lang}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">{home.eyebrow}</span>
+        <h1>{home.headline}</h1>
+        <p class="lead">{home.subhead}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={href('contact/')}>{home.primaryCta}</a>
+          <a class="btn btn-secondary" href={telHref(practice.primaryPhone)}><Icon name="phone" size={18} /> {home.secondaryCta} {practice.primaryPhone}</a>
+        </div>
+        <ul class="hero-trust">{home.trustPoints.map((t) => <li><strong>{t.label}</strong><span>{t.detail}</span></li>)}</ul>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg class="grid" viewBox="0 0 400 400" preserveAspectRatio="none"><defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0v40" fill="none" stroke="#fff" stroke-width="1"/></pattern></defs><rect width="400" height="400" fill="url(#g)"/></svg>
+        <div class="float-card fc-1"><span class="ic"><Icon name="shield" /></span><div><strong>{ui.clinical.float1}</strong><span>{ui.clinical.float1sub}</span></div></div>
+        <div class="float-card fc-2"><span class="ic"><Icon name="clock" /></span><div><strong>{ui.clinical.float2}</strong><span>{ui.clinical.float2sub}</span></div></div>
+        <div class="float-card fc-3"><span class="ic"><Icon name="pin" /></span><div><strong>{ui.clinical.float3}</strong><span>{ui.clinical.float3sub}</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{ui.whatWeDo}</span><h2>{ui.clinical.servicesTitle}</h2><p>{ui.clinical.servicesSub}</p></div>
+      <div class="cards">
+        {services.map((s) => (
+          <article class="card">
+            <span class="ic"><Icon name={icons[s.slug]} /></span>
+            <h3>{s.title}</h3>
+            <p>{s.blurb}</p>
+            <ul>{s.highlights.slice(0, 4).map((h) => <li>{h}</li>)}</ul>
+            <a class="btn btn-ghost" href={href(s.slug + '/')}>{ui.learnMore}</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{ui.conditions}</span><h2>{ui.commonlyTreated}</h2></div>
+      <ul class="chips">{commonConditions.map((c) => <li class="chip">{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container doctor-grid">
+      <div class="doctor-photo"><img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" /></div>
+      <div>
+        <span class="eyebrow">{ui.meetDoctor}</span>
+        <h2>{doctor.name}</h2>
+        <p class="lead" style="margin-top: var(--s-2)">{doctor.title}</p>
+        <div class="badges">{doctor.credentials.map((c) => <span class="badge"><Icon name="check" size={14} />{c.short}</span>)}</div>
+        <p>{doctor.summary}</p>
+        <blockquote>“{doctor.quote}”</blockquote>
+        <a class="btn btn-secondary" href={href('doctor/')}>{ui.fullProfile}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{ui.locations}</span><h2>{ui.clinical.locationsTitle}</h2></div>
+      <Locations lang={lang} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-band">
+        <div><h2>{home.closing}</h2><p>{ui.ctaSub}</p></div>
+        <a class="btn btn-primary" href={href('contact/')}>{home.primaryCta}</a>
+      </div>
+    </div>
+  </section>
+</Layout>

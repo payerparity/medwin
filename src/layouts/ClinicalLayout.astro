@@ -5,22 +5,24 @@ import Seo from '@/components/shared/Seo.astro';
 import VibeSwitcher from '@/components/shared/VibeSwitcher.astro';
 import Nav from '@/components/clinical/Nav.astro';
 import Footer from '@/components/clinical/Footer.astro';
-interface Props { title: string; description?: string; }
-const { title, description } = Astro.props;
+import { getContent, type Lang } from '@/i18n';
+interface Props { title: string; description?: string; lang: Lang; }
+const { title, description, lang } = Astro.props;
+const { ui } = getContent(lang);
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
-    <Seo title={title} description={description} />
+    <Seo title={title} description={description} lang={lang} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Nav />
+    <a class="skip-link" href="#main">{ui.skip}</a>
+    <Nav lang={lang} />
     <main id="main"><slot /></main>
-    <Footer />
+    <Footer lang={lang} />
     <VibeSwitcher current="clinical" />
   </body>
 </html>

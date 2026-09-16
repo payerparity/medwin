@@ -9,7 +9,7 @@ A modern replacement for [acepain.com](https://acepain.com), built as one [Astro
 | Bold & Athletic | `/bold/` | Charcoal + electric lime, big condensed type — sports-medicine energy |
 | Editorial | `/editorial/` | Off-white, navy, gold hairlines, elegant serif — quiet premium |
 
-Each vibe has the same seven pages: Home, Pain Management, Physical Therapy, Workers' Comp, Meet the Doctor, Patient Resources (portal + 42 brochure PDFs in EN/ES), Contact.
+Each vibe has the same seven pages: Home, Pain Management, Physical Therapy, Workers' Comp, Meet the Doctor, Patient Resources (portal + 42 brochure PDFs in EN/ES), Contact — **in English and Spanish**. English lives at `/<vibe>/…`, Spanish at `/<vibe>/es/…`, and every header has an EN / ES toggle that jumps to the same page in the other language. 56 pages total.
 
 ## Run it
 
@@ -35,32 +35,41 @@ node scripts/check-overflow.mjs http://localhost:4321/clinical/
 ## Where things live
 
 ```
-src/content/        ← ALL copy, phone numbers, addresses, brochure list. Edit here, every vibe updates.
-  practice.ts         name, phones, locations, hours, portal URL, form endpoint
-  services.ts         the three service lines + condition lists
-  doctor.ts           bio + credentials
-  brochures.ts        procedure PDF index (files in public/brochures/{en,es}/)
-  site.ts             nav, vibe list, home-page copy
-src/components/shared/   VibeSwitcher, ContactForm, BrochureList, MapEmbed, Seo — used by every vibe
-src/components/<vibe>/   Nav, Footer, Locations, ServicePage — per-vibe presentation
+src/data/               ← ALL copy, phone numbers, addresses, brochure list. Edit here, every vibe updates.
+  practice.ts             name, phones, locations, portal URL, form endpoint (language-neutral)
+  services.ts             the three service lines + condition lists (English)
+  doctor.ts               bio + credentials (English)
+  site.ts                 nav, vibe list, home-page copy (English)
+  brochures.ts            procedure PDF index, EN + ES titles (files in public/brochures/{en,es}/)
+  ui.ts                   every button/label/heading string, `en` and `es` — TypeScript enforces the same shape
+  es/{services,doctor,site}.ts   Spanish mirrors of the English content files, same types
+src/i18n.ts              getContent(lang), localePath(), switchLangHref() — the language axis
+src/components/shared/   VibeSwitcher, LangSwitch, ContactForm, BrochureList, MapEmbed, Seo — used by every vibe
+src/components/<vibe>/   Nav, Footer, Locations, HomePage, ServicePage, DoctorPage, ResourcesPage, ContactPage — take `lang`
 src/layouts/<Vibe>Layout.astro
 src/styles/<vibe>.css    all visual decisions for that vibe (base.css = reset + spacing tokens)
-src/pages/<vibe>/        7 thin pages per vibe
+src/pages/<vibe>/        7 three-line wrappers (lang="en") + es/ with the same 7 (lang="es")
 src/pages/index.astro    the picker (delete after choosing)
 CONTENT-NOTES.md         what changed from the old site + what the client must confirm
 ```
 
-Pages are deliberately thin: they import content and hand it to that vibe's components. Presentation is duplicated four times on purpose; content is never duplicated.
+Pages are deliberately thin: they pass `lang` to that vibe's page component, which pulls everything from `getContent(lang)`. Presentation is duplicated four times on purpose; content is never duplicated. Adding a third language = one more folder in `src/data/`, one more key in `ui.ts`, and one more `pages/<vibe>/<lang>/` folder.
+
+To type-check (this is what catches a missing Spanish string):
+
+```bash
+npx astro check
+```
 
 ## Promote the chosen vibe
 
 Say the client picks **warm**:
 
-1. `git mv src/pages/warm/* src/pages/` (overwrite `index.astro` — the picker).
-2. In every moved page and in `src/components/warm/*`, change `const base = '/warm/'` to `'/'`.
+1. `git mv src/pages/warm/* src/pages/` (overwrite `index.astro` — the picker). Spanish pages land at `/es/…`.
+2. In `src/components/warm/*`, change `localePath('warm', lang, p)` to `localePath('', lang, p)` and make `localePath` in `src/i18n.ts` not double the slash (`/${lang === 'es' ? 'es/' : ''}${path}`). Update `switchLangHref` to match (no vibe segment).
 3. Delete `src/pages/{clinical,bold,editorial}`, `src/components/{clinical,bold,editorial}`, `src/layouts/{Clinical,Bold,Editorial}Layout.astro`, `src/styles/{clinical,bold,editorial}.css`, `public/previews/`, `scripts/screenshots.mjs`.
 4. Remove `<VibeSwitcher>` from `WarmLayout.astro` and delete `src/components/shared/VibeSwitcher.astro`.
-5. Optionally rename `warm` → `site` throughout; trim `vibes` from `src/content/site.ts`.
+5. Optionally rename `warm` → `site` throughout; trim `vibes` from `src/data/site.ts`.
 6. `npm run build` and deploy `dist/` (Netlify, Vercel, Cloudflare Pages — any static host).
 
 ## Before launch (see CONTENT-NOTES.md)

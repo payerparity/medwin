@@ -1,18 +1,20 @@
 ---
 import MapEmbed from '@/components/shared/MapEmbed.astro';
-import { locations, telHref, formatAddress, mapsHref } from '@/content/practice';
-interface Props { maps?: boolean }
-const { maps = false } = Astro.props;
+import { locations, telHref, formatAddress, mapsHref } from '@/data/practice';
+import { getContent, type Lang } from '@/i18n';
+interface Props { lang: Lang; maps?: boolean }
+const { lang, maps = false } = Astro.props;
+const { ui } = getContent(lang);
 ---
 <div class="locations">
   {locations.map((l) => (
     <article class="location">
       <h3>{l.name}</h3>
-      <address>{formatAddress(l)}<br /><a href={telHref(l.phone)}>{l.phone}</a> · Fax {l.fax}</address>
-      {maps && <MapEmbed location={l} />}
+      <address>{formatAddress(l)}<br /><a href={telHref(l.phone)}>{l.phone}</a> · {ui.fax} {l.fax}</address>
+      {maps && <MapEmbed location={l} lang={lang} />}
       <div class="location-actions">
-        <a class="btn btn-primary" href={telHref(l.phone)}>Call</a>
-        <a class="btn btn-outline" href={mapsHref(l)} target="_blank" rel="noopener">Directions</a>
+        <a class="btn btn-primary" href={telHref(l.phone)}>{ui.call}</a>
+        <a class="btn btn-outline" href={mapsHref(l)} target="_blank" rel="noopener">{ui.directions}</a>
       </div>
     </article>
   ))}

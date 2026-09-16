@@ -1,0 +1,102 @@
+---
+import Layout from '@/layouts/WarmLayout.astro';
+import Locations from './Locations.astro';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { services, commonConditions, doctor, home, ui } = getContent(lang);
+const t = ui.warm;
+const href = (p: string) => localePath('warm', lang, p);
+---
+<Layout title={practice.name} lang={lang}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">{home.eyebrow}</span>
+        <h1>{t.headlineBefore}<em>{t.headlineEm}</em></h1>
+        <p class="lead">{home.subhead}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={href('contact/')}>{home.primaryCta}</a>
+          <a class="btn-link" href={telHref(practice.primaryPhone)}>{t.orCall} {practice.primaryPhone}</a>
+        </div>
+        <p class="hero-note">
+          <span class="dots" aria-hidden="true"><span style="background:var(--terra)"></span><span style="background:var(--sage)"></span><span style="background:var(--ink)"></span></span>
+          {t.heroNote}
+        </p>
+      </div>
+      <div class="blob">
+        <div class="blob-shape" aria-hidden="true"></div>
+        <div class="blob-photo" aria-hidden="true"><span class="blob-inner"></span><span class="blob-word" set:html={t.blobWord}></span></div>
+        <span class="blob-tag bt-1"><i></i> {t.tag1}</span>
+        <span class="blob-tag bt-2"><i></i> {t.tag2}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <ul class="trust">{home.trustPoints.map((p) => <li><strong>{p.label}</strong><span>{p.detail}</span></li>)}</ul>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head center"><span class="eyebrow">{t.howWeHelp}</span><h2>{t.servicesTitleBefore}<em>{t.servicesTitleEm}</em>{t.servicesTitleAfter}</h2></div>
+      <div class="chapters">
+        {services.map((s, i) => (
+          <article class="chapter">
+            <div class={`chapter-visual v-${i + 1}`} aria-hidden="true"><span class="ring"></span><span class="ring ring-2"></span><span class="big-num">{i + 1}</span></div>
+            <div>
+              <span class="chapter-num">{t.chapter} {i + 1}</span>
+              <h2>{s.title}</h2>
+              <p>{s.blurb}</p>
+              <ul>{s.highlights.slice(0, 4).map((h) => <li>{h}</li>)}</ul>
+              <a class="btn btn-secondary" href={href(s.slug + '/')}>{ui.about} {s.shortTitle.toLowerCase()}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <figure class="pull"><p>{home.mission}</p><figcaption><cite>{t.mission}</cite></figcaption></figure>
+  </section>
+
+  <section class="section">
+    <div class="container doctor">
+      <div class="doctor-photo"><img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" /></div>
+      <div>
+        <span class="eyebrow">{ui.meetDoctor}</span>
+        <blockquote>{doctor.quote}”</blockquote>
+        <p class="who">{doctor.name}<small>{doctor.title}</small></p>
+        <ul class="creds">{doctor.credentials.map((c) => <li>{c.short}</li>)}</ul>
+        <a class="btn-link" href={href('doctor/')}>{ui.readStory}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head center"><span class="eyebrow">{ui.conditions}</span><h2>{t.conditionsTitleBefore}<em>{t.conditionsTitleEm}</em></h2></div>
+      <ul class="cond-cloud">{commonConditions.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{ui.locations}</span><h2>{t.locationsTitle}</h2></div>
+      <Locations lang={lang} />
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom: var(--s-8)">
+    <div class="cta">
+      <h2>{home.closing}</h2>
+      <p>{ui.ctaSubWarm}</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href={href('contact/')}>{home.primaryCta}</a>
+        <a class="btn btn-secondary" href={telHref(practice.primaryPhone)}>{ui.call} {practice.primaryPhone}</a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -46,3 +46,10 @@ input, textarea, select { font: inherit; }
   .vibe-switcher { left: 0.5rem; right: 0.5rem; overflow-x: auto; scrollbar-width: none; }
   .vibe-switcher a { padding: 0.5rem 0.55rem; font-size: 0.7rem; }
 }
+
+/* Language toggle — structural only; each vibe colors it */
+.lang-switch { display: inline-flex; align-items: center; gap: 0.25rem; text-decoration: none; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap; }
+.lang-switch .ls-sep { opacity: .4; }
+.lang-switch .ls-other { opacity: .55; }
+.lang-switch:hover .ls-other { opacity: 1; }
+@media (max-width: 47.99em) { .lang-switch .ls-cur, .lang-switch .ls-sep { display: none; } .lang-switch .ls-other { opacity: 1; } }

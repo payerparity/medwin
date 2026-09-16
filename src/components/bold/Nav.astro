@@ -1,22 +1,29 @@
 ---
-import { nav } from '@/content/site';
-import { practice, telHref } from '@/content/practice';
-const base = '/bold/';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+import LangSwitch from '@/components/shared/LangSwitch.astro';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { nav, ui } = getContent(lang);
+const href = (p: string) => localePath('bold', lang, p);
 const path = Astro.url.pathname;
-const isCurrent = (p: string) => path === base + p;
+const isCurrent = (p: string) => path === href(p);
 ---
 <header class="nav">
   <div class="container nav-inner">
-    <a class="brand" href={base}><i aria-hidden="true"></i>Ace Pain Management</a>
+    <a class="brand" href={href('')}><i aria-hidden="true"></i>Ace Pain Management</a>
     <nav class="nav-links" aria-label="Primary">
-      {nav.filter(n => n.path !== '').map((n) => <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
+      {nav.filter(n => n.path !== '').map((n) => <a href={href(n.path)} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
     </nav>
-    <a class="btn btn-primary nav-cta" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>Menu</button>
+    <div class="nav-right">
+      <LangSwitch lang={lang} />
+      <a class="btn btn-primary nav-cta" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle data-menu={ui.menu} data-close={ui.close}>{ui.menu}</button>
+    </div>
   </div>
   <nav class="nav-mobile" id="mobile-nav" hidden aria-label="Primary mobile">
-    {nav.map((n) => <a href={base + n.path} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
-    <a class="btn btn-primary" href={telHref(practice.primaryPhone)}>Call {practice.primaryPhone}</a>
+    {nav.map((n) => <a href={href(n.path)} aria-current={isCurrent(n.path) ? 'page' : undefined}>{n.label}</a>)}
+    <a class="btn btn-primary" href={telHref(practice.primaryPhone)}>{ui.call} {practice.primaryPhone}</a>
   </nav>
 </header>
 <script>
@@ -25,7 +32,7 @@ const isCurrent = (p: string) => path === base + p;
   t?.addEventListener('click', () => {
     const open = t.getAttribute('aria-expanded') === 'true';
     t.setAttribute('aria-expanded', String(!open));
-    t.textContent = open ? 'Menu' : 'Close';
+    t.textContent = open ? (t.dataset.menu ?? 'Menu') : (t.dataset.close ?? 'Close');
     if (m) m.hidden = open;
   });
 </script>

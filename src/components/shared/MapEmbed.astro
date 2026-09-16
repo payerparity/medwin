@@ -1,13 +1,8 @@
 ---
-import { mapsEmbedSrc, type Location } from '@/content/practice';
-interface Props { location: Location; }
-const { location } = Astro.props;
+import { mapsEmbedSrc, type Location } from '@/data/practice';
+import type { Lang } from '@/i18n';
+interface Props { location: Location; lang?: Lang; }
+const { location, lang = 'en' } = Astro.props;
+const title = lang === 'es' ? `Mapa del consultorio de ${location.name}` : `Map to ${location.name} office`;
 ---
-<iframe
-  class="map"
-  src={mapsEmbedSrc(location)}
-  title={`Map to ${location.name} office`}
-  loading="lazy"
-  referrerpolicy="no-referrer-when-downgrade"
-  allowfullscreen
-></iframe>
+<iframe class="map" src={mapsEmbedSrc(location) + `&hl=${lang}`} title={title} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>

@@ -1,0 +1,12 @@
+---
+// EN / ES toggle. Links to the same page in the other language. Styled per vibe via .lang-switch.
+import { switchLangHref, type Lang } from '@/i18n';
+import { ui } from '@/data/ui';
+interface Props { lang: Lang; class?: string; }
+const { lang, class: cls = '' } = Astro.props;
+const other: Lang = lang === 'es' ? 'en' : 'es';
+const href = switchLangHref(Astro.url.pathname, other);
+---
+<a class={`lang-switch ${cls}`} href={href} hreflang={other} lang={other} aria-label={`${ui[lang].otherLangLabel}`}>
+  <span class="ls-cur" aria-hidden="true">{lang.toUpperCase()}</span><span class="ls-sep" aria-hidden="true">/</span><span class="ls-other">{other.toUpperCase()}</span>
+</a>

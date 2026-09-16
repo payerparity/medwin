@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/BoldLayout.astro';
+import BrochureList from '@/components/shared/BrochureList.astro';
+import { practice } from '@/data/practice';
+import { getContent, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { ui } = getContent(lang);
+const t = ui.bold;
+---
+<Layout title={ui.pages.resourcesTitle} description={t.resourcesLead} lang={lang}>
+  <section class="page-head"><div class="container"><span class="eyebrow">{ui.patients}</span><h1>{t.resourcesTitleBefore}<span class="hl">{t.resourcesTitleEm}</span></h1><p class="lead">{t.resourcesLead}</p></div></section>
+  <section class="section container">
+    <div class="resource-cards">
+      <article class="aside-card"><h3>{ui.patientPortal}</h3><p style="margin-bottom: var(--s-4)">{ui.portalBlurb}</p><a class="btn btn-primary" href={practice.portalUrl} target="_blank" rel="noopener">{ui.openPortalShort}</a></article>
+      <article class="aside-card"><h3>{ui.procedureBrochures}</h3><p style="margin-bottom: var(--s-4)">{ui.brochuresBlurb}</p><a class="btn btn-outline" href="#brochures">{ui.browse}</a></article>
+    </div>
+    <div class="section-head" id="brochures"><span class="eyebrow">{ui.brochures}</span><h2>{ui.procedureGuides}</h2><p>{ui.guidesNote} <span lang={lang === 'es' ? 'en' : 'es'}>{ui.guidesNoteOther}</span></p></div>
+    <BrochureList lang={lang} />
+  </section>
+</Layout>

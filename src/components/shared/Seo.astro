@@ -1,14 +1,24 @@
 ---
-import { practice } from '@/content/practice';
-interface Props { title: string; description?: string; }
-const { title, description = practice.description } = Astro.props;
+import { practice } from '@/data/practice';
+import { switchLangHref, type Lang } from '@/i18n';
+import { ui } from '@/data/ui';
+interface Props { title: string; description?: string; lang: Lang; }
+const { title, lang, description } = Astro.props;
+const desc = description ?? ui[lang].seoDescription;
 const fullTitle = title === practice.name ? title : `${title} · ${practice.name}`;
+const path = Astro.url.pathname;
+const enHref = switchLangHref(path, 'en');
+const esHref = switchLangHref(path, 'es');
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{fullTitle}</title>
-<meta name="description" content={description} />
+<meta name="description" content={desc} />
 <meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
+<meta property="og:description" content={desc} />
 <meta property="og:type" content="website" />
+<meta property="og:locale" content={lang === 'es' ? 'es_US' : 'en_US'} />
+<link rel="alternate" hreflang="en" href={enHref} />
+<link rel="alternate" hreflang="es" href={esHref} />
+<link rel="alternate" hreflang="x-default" href={enHref} />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

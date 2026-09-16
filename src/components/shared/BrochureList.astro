@@ -1,21 +1,28 @@
 ---
-// Procedure brochures grouped by spine region, with EN / ES download links.
-import { brochures, brochureHref, brochureRegions } from '@/content/brochures';
-const labels: Record<string, string> = { Cervical: 'Neck (cervical)', Thoracic: 'Mid-back (thoracic)', Lumbar: 'Low back (lumbar)', Other: 'Pelvis & other' };
+// Procedure brochures grouped by spine region, with EN / ES download links. Spanish mode lists the Spanish title first.
+import { brochures, brochureHref, brochureRegions } from '@/data/brochures';
+import { ui } from '@/data/ui';
+import type { Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = ui[lang];
 ---
 <div class="brochures">
   {brochureRegions.map((region) => (
     <section class="brochure-group">
-      <h3>{labels[region]}</h3>
+      <h3>{t.regions[region]}</h3>
       <ul class="brochure-list">
         {brochures.filter((b) => b.region === region).map((b) => (
           <li>
-            <span class="brochure-title">{b.title}</span>
+            <span class="brochure-title">{lang === 'es' ? b.titleEs : b.title}</span>
             <span class="brochure-links">
-              <a href={brochureHref(b, 'en')} target="_blank" rel="noopener">English<span class="visually-hidden">: {b.title} (PDF)</span></a>
-              {b.es
-                ? <a href={brochureHref(b, 'es')} target="_blank" rel="noopener" lang="es">Español<span class="visually-hidden">: {b.titleEs} (PDF)</span></a>
-                : <span class="brochure-na" aria-hidden="true">—</span>}
+              {lang === 'es' && (b.es
+                ? <a href={brochureHref(b, 'es')} target="_blank" rel="noopener" lang="es">{t.pdfSpanish}<span class="visually-hidden">: {b.titleEs} (PDF)</span></a>
+                : <span class="brochure-na" aria-hidden="true">—</span>)}
+              <a href={brochureHref(b, 'en')} target="_blank" rel="noopener" lang="en">{t.pdfEnglish}<span class="visually-hidden">: {b.title} (PDF)</span></a>
+              {lang === 'en' && (b.es
+                ? <a href={brochureHref(b, 'es')} target="_blank" rel="noopener" lang="es">{t.pdfSpanish}<span class="visually-hidden">: {b.titleEs} (PDF)</span></a>
+                : <span class="brochure-na" aria-hidden="true">—</span>)}
             </span>
           </li>
         ))}

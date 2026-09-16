@@ -1,0 +1,76 @@
+---
+import Layout from '@/layouts/EditorialLayout.astro';
+import Locations from './Locations.astro';
+import { practice, telHref } from '@/data/practice';
+import { getContent, localePath, type Lang } from '@/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const { services, commonConditions, doctor, home, ui } = getContent(lang);
+const t = ui.editorial;
+const href = (p: string) => localePath('editorial', lang, p);
+---
+<Layout title={practice.name} lang={lang}>
+  <section class="hero container">
+    <span class="eyebrow">{home.eyebrow}</span>
+    <h1>{t.headlineBefore}<em>{t.headlineEm}</em></h1>
+    <div class="hero-meta">
+      <p class="lead">{home.subhead}</p>
+      <dl>{home.trustPoints.map((p) => <div><dt>{p.label}</dt><dd>{p.detail}</dd></div>)}</dl>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href={href('contact/')}>{home.primaryCta}</a>
+        <a class="btn" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><h2>{ui.services}</h2><p>{t.servicesSub}</p></div>
+    <div class="index">
+      {services.map((s, i) => (
+        <a class="index-row" href={href(s.slug + '/')}>
+          <span class="num">0{i + 1}</span>
+          <div><h3>{s.title}</h3><p>{s.blurb}</p></div>
+          <ul>{s.highlights.slice(0, 4).map((h) => <li>{h}</li>)}</ul>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="profile">
+      <figure class="profile-photo">
+        <img src={doctor.photo} alt={doctor.photoAlt} width="477" height="331" />
+        <figcaption>{doctor.name} — {doctor.credentials.map((c) => c.short).join(' · ')}</figcaption>
+      </figure>
+      <div>
+        <span class="eyebrow">{ui.thePhysician}</span>
+        <h2>{doctor.name}</h2>
+        <p class="role">{doctor.title}</p>
+        <p class="dropcap">{doctor.bio[0]}</p>
+        <blockquote class="pull">“{doctor.quote}”</blockquote>
+        <a class="link" href={href('doctor/')}>{ui.readProfile}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="section-head"><h2>{ui.conditions}</h2><p>{t.conditionsSub}</p></div>
+    <ul class="cond-cols">{commonConditions.map((c) => <li>{c}</li>)}</ul>
+  </section>
+
+  <section class="section container" style="padding-top:0">
+    <div class="section-head"><h2>{ui.locations}</h2><p>{t.locationsSub}</p></div>
+    <Locations lang={lang} />
+  </section>
+
+  <section class="closing container">
+    <div class="ornament" aria-hidden="true">❧</div>
+    <h2>{home.closing}</h2>
+    <p>{t.closingSub}</p>
+    <div class="closing-actions">
+      <a class="btn btn-solid" href={href('contact/')}>{home.primaryCta}</a>
+      <a class="btn btn-gold" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
+    </div>
+  </section>
+</Layout>

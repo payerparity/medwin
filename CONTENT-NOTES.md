@@ -1,6 +1,6 @@
 # Content notes — what changed from acepain.com and what the client must confirm
 
-All copy lives in `src/content/`. These are the editorial decisions made when migrating from the old Weebly site.
+All copy lives in `src/data/`. These are the editorial decisions made when migrating from the old Weebly site.
 
 ## Removed (copied from other clinics' websites)
 - "At Body in Balance, we pride ourselves…" (Pain Management page) — Body in Balance is a different practice.
@@ -27,3 +27,12 @@ All copy lives in `src/content/`. These are the editorial decisions made when mi
 | Logo | `public/images/old-logo.png` | Old raster logo; new site uses a text wordmark. Client may want a real logo. |
 | Insurance accepted | — | Not on old site; common patient question. Add if client provides. |
 | Hero / facility photos | vibes use stock-style placeholder gradients/shapes | Real clinic photos would materially improve every vibe. |
+
+## Spanish
+
+All Spanish copy was written for this redesign (the old site had only the tagline "Tratamiento de Dolor" and the Spanish brochures). It uses neutral, formal (usted) Spanish appropriate for the Rio Grande Valley. Things worth a native-speaker review before launch:
+
+- Service names: "Manejo Intervencionista del Dolor", "Fisioterapia y Rehabilitación", "Compensación Laboral" — "Compensación para Trabajadores" is also common in Texas; pick one and keep it consistent.
+- Credential names (`src/data/es/doctor.ts`) are translated descriptively; the acronyms stay in English.
+- The Bold vibe's hero "Vuelva al trabajo. Vuelva a la acción." is a loose equivalent of "Get back to work. Get back to play." — confirm the tone.
+- Nav labels were shortened in Spanish to fit ("Dr. Raguthu", "Recursos"); longer forms are in `src/data/ui.ts`.

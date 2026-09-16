@@ -1,45 +1,29 @@
 ---
 import Layout from '@/layouts/WarmLayout.astro';
-import { practice, telHref } from '@/content/practice';
-import { serviceBySlug, type Service } from '@/content/services';
-interface Props { slug: Service['slug']; }
-const s = serviceBySlug(Astro.props.slug);
-const base = '/warm/';
+import { practice, telHref } from '@/data/practice';
+import { getContent, serviceBySlug, localePath, type Lang } from '@/i18n';
+import type { Service } from '@/data/services';
+interface Props { slug: Service['slug']; lang: Lang; }
+const { slug, lang } = Astro.props;
+const s = serviceBySlug(lang, slug);
+const { ui } = getContent(lang);
+const href = (p: string) => localePath('warm', lang, p);
 ---
-<Layout title={s.title} description={s.blurb}>
-  <section class="page-head container">
-    <span class="eyebrow">What we do</span>
-    <h1>{s.title}</h1>
-    <p class="lead">{s.intro}</p>
-  </section>
+<Layout title={s.title} description={s.blurb} lang={lang}>
+  <section class="page-head container"><span class="eyebrow">{ui.whatWeDo}</span><h1>{s.title}</h1><p class="lead">{s.intro}</p></section>
   <section class="section container two-col" style="padding-top: var(--s-6)">
     <div class="prose">
-      {s.sections.map((sec) => (
-        <div>
-          <h2>{sec.heading}</h2>
-          {sec.paragraphs.map((p) => <p>{p}</p>)}
-          {sec.bullets && <ul>{sec.bullets.map((b) => <li>{b}</li>)}</ul>}
-        </div>
-      ))}
+      {s.sections.map((sec) => <div><h2>{sec.heading}</h2>{sec.paragraphs.map((p) => <p>{p}</p>)}{sec.bullets && <ul>{sec.bullets.map((b) => <li>{b}</li>)}</ul>}</div>)}
     </div>
     <aside class="aside">
-      <div class="aside-card">
-        <h3>At a glance</h3>
-        <ul>{s.highlights.map((h) => <li>{h}</li>)}</ul>
-      </div>
-      <div class="aside-card call">
-        <h3>Let's talk</h3>
-        <a class="phone" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a>
-        <a class="btn btn-primary" href={base + 'contact/'}>Request an appointment</a>
-      </div>
+      <div class="aside-card"><h3>{ui.atAGlance}</h3><ul>{s.highlights.map((h) => <li>{h}</li>)}</ul></div>
+      <div class="aside-card call"><h3>{ui.letsTalk}</h3><a class="phone" href={telHref(practice.primaryPhone)}>{practice.primaryPhone}</a><a class="btn btn-primary" href={href('contact/')}>{ui.requestAppointment}</a></div>
     </aside>
   </section>
   {s.conditionGroups && (
     <section class="section container" style="padding-top:0">
-      <div class="section-head"><span class="eyebrow">Conditions</span><h2>What we treat</h2></div>
-      <div class="conditions">
-        {s.conditionGroups.map((g) => <div class="condition"><h3>{g.title}</h3><ul>{g.items.map((i) => <li>{i}</li>)}</ul></div>)}
-      </div>
+      <div class="section-head"><span class="eyebrow">{ui.conditions}</span><h2>{ui.whatWeTreat}</h2></div>
+      <div class="conditions">{s.conditionGroups.map((g) => <div class="condition"><h3>{g.title}</h3><ul>{g.items.map((i) => <li>{i}</li>)}</ul></div>)}</div>
     </section>
   )}
 </Layout>

@@ -47,12 +47,16 @@ p { color: var(--muted); }
 .nav-links a { padding: 0.5rem 0.6rem; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
 .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--blue); background: var(--blue-soft); }
 .nav-cta { display: none; white-space: nowrap; }
+.nav-right { display: flex; align-items: center; gap: var(--s-2); }
+@media (min-width: 48em) { .nav-right { gap: var(--s-3); } }
+.nav .lang-switch { color: var(--muted); padding: 0.4rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; }
+.nav .lang-switch:hover { color: var(--blue); border-color: var(--blue); }
 .nav-toggle { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem; color: var(--ink); }
-@media (min-width: 72em) {
+@media (min-width: 78em) {
   .nav-links { display: flex; }
   .nav-toggle, .nav-mobile { display: none !important; }
 }
-@media (min-width: 84em) { .nav-cta { display: flex; } }
+@media (min-width: 90em) { .nav-cta { display: flex; } }
 .nav-mobile { border-top: 1px solid var(--line); background: #fff; padding: var(--s-4) var(--gutter) var(--s-5); display: grid; gap: var(--s-1); }
 .nav-mobile[hidden] { display: none; }
 .nav-mobile a { padding: 0.75rem 0.5rem; text-decoration: none; font-weight: 500; border-radius: 6px; }
@@ -186,3 +190,5 @@ blockquote { border-left: 3px solid var(--teal); padding-left: var(--s-4); font-
 
 /* Nav gets a wider container than page content so six links + CTA fit */
 .nav .container { max-width: 90rem; }
+
+@media (max-width: 22em) { .nav-inner { gap: var(--s-3); } .nav .brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; } .nav-right { flex-shrink: 0; } }

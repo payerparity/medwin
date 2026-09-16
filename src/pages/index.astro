@@ -1,7 +1,7 @@
 ---
 // The picker: lets the client browse the four design directions. Delete this page once a vibe is chosen.
-import { vibes } from '@/content/site';
-import { practice } from '@/content/practice';
+import { vibes } from '@/data/site';
+import { practice } from '@/data/practice';
 const swatches: Record<string, string[]> = {
   clinical: ['#0b5fa5', '#1ba39c', '#f4f7fb', '#0f172a'],
   warm: ['#c8663d', '#8fa58c', '#fbf7f1', '#3b2f2a'],
@@ -62,7 +62,7 @@ const fonts: Record<string, string> = {
       <header>
         <p class="eyebrow">{practice.name} — website redesign</p>
         <h1>Four directions. Same content. Pick the one that feels like your practice.</h1>
-        <p>Every version has the same seven pages, the same copy, phone numbers, locations and brochures. Only the look and feel changes. Open any one and use the switcher in the bottom corner to hop between designs on the same page.</p>
+        <p>Every version has the same seven pages, the same copy, phone numbers, locations and brochures — in English and Spanish, with an <strong>EN / ES</strong> toggle in every header. Only the look and feel changes. Open any one and use the switcher in the bottom corner to hop between designs on the same page.</p>
       </header>
 
       <div class="grid">
@@ -83,7 +83,7 @@ const fonts: Record<string, string> = {
             </div>
             <div class="actions">
               <a class="btn btn-primary" href={`/${v.id}/`}>Open {v.name} →</a>
-              <a class="btn" href={`/${v.id}/contact/`}>Contact page</a>
+              <a class="btn" href={`/${v.id}/es/`} lang="es">En español</a>
             </div>
           </article>
         ))}

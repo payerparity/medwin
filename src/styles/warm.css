@@ -53,9 +53,13 @@ p { color: var(--muted); }
 .nav-links a:hover { background: var(--cream-2); }
 .nav-links a[aria-current="page"] { background: var(--terra-soft); color: var(--terra-dark); }
 .nav-cta { display: none; white-space: nowrap; }
+.nav-right { display: flex; align-items: center; gap: var(--s-2); }
+@media (min-width: 48em) { .nav-right { gap: var(--s-3); } }
+.nav .lang-switch { color: var(--muted); padding: 0.45rem 0.7rem; border-radius: 999px; background: var(--cream-2); }
+.nav .lang-switch:hover { color: var(--terra-dark); background: var(--terra-soft); }
 .nav-toggle { background: var(--cream-2); border: 0; border-radius: 999px; padding: 0.6rem 1rem; font-weight: 600; color: var(--ink); }
-@media (min-width: 72em) { .nav-links { display: flex; } .nav-toggle, .nav-mobile { display: none !important; } }
-@media (min-width: 84em) { .nav-cta { display: flex; } }
+@media (min-width: 78em) { .nav-links { display: flex; } .nav-toggle, .nav-mobile { display: none !important; } }
+@media (min-width: 90em) { .nav-cta { display: flex; } }
 .nav-mobile { display: grid; gap: 0.25rem; padding: var(--s-4) var(--gutter); background: var(--cream-2); border-radius: var(--r); margin: var(--s-3) var(--gutter) 0; }
 .nav-mobile[hidden] { display: none; }
 .nav-mobile a { padding: 0.75rem 0.75rem; text-decoration: none; font-weight: 500; border-radius: 999px; }
@@ -231,3 +235,7 @@ p { color: var(--muted); }
 
 /* Nav gets a wider container than page content so six links + CTA fit */
 .nav .container { max-width: 90rem; }
+
+@media (max-width: 25em) { .nav .brand { font-size: 1.1rem; } .nav-toggle { padding: 0.5rem 0.7rem; } }
+
+@media (max-width: 22em) { .nav-inner { gap: var(--s-3); } .nav .brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; } .nav-right { flex-shrink: 0; } }
