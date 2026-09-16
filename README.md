@@ -11,6 +11,8 @@ A modern replacement for [acepain.com](https://acepain.com), built as one [Astro
 
 Each vibe has the same seven pages: Home, Pain Management, Physical Therapy, Workers' Comp, Meet the Doctor, Patient Resources (portal + 42 brochure PDFs in EN/ES), Contact — **in English and Spanish**. English lives at `/<vibe>/…`, Spanish at `/<vibe>/es/…`, and every header has an EN / ES toggle that jumps to the same page in the other language. 56 pages total.
 
+**Language defaults to the browser.** An inline script in `<head>` (see `Seo.astro`) sends a first-time visitor whose browser language is Spanish from any English page to its `/es/` twin. Using the toggle stores `localStorage.lang`, after which the site stops guessing. Verify with `node scripts/check-lang-redirect.mjs` (needs the dev server).
+
 ## Run it
 
 ```bash

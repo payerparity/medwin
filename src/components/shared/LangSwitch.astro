@@ -7,6 +7,12 @@ const { lang, class: cls = '' } = Astro.props;
 const other: Lang = lang === 'es' ? 'en' : 'es';
 const href = switchLangHref(Astro.url.pathname, other);
 ---
-<a class={`lang-switch ${cls}`} href={href} hreflang={other} lang={other} aria-label={`${ui[lang].otherLangLabel}`}>
+<a class={`lang-switch ${cls}`} href={href} hreflang={other} lang={other} aria-label={`${ui[lang].otherLangLabel}`} data-lang-switch={other}>
   <span class="ls-cur" aria-hidden="true">{lang.toUpperCase()}</span><span class="ls-sep" aria-hidden="true">/</span><span class="ls-other">{other.toUpperCase()}</span>
 </a>
+<script>
+  // Remember an explicit choice so the auto-redirect in Seo.astro stays out of the way.
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((a) => {
+    a.addEventListener('click', () => { try { localStorage.setItem('lang', a.dataset.langSwitch ?? ''); } catch {} });
+  });
+</script>
